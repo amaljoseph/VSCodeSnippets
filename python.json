@@ -12,8 +12,8 @@
     // 	],
     // 	"description": "Log output to console"
     // }
-    "load_image": {
-        "prefix": "load_image",
+    "load image": {
+        "prefix": "load image",
         "body": [
             "def load_image(path):",
             "    image = cv2.imread(path)",
@@ -21,13 +21,21 @@
         ], 
         "description": "Load an image using csv"
     }, 
-    "load_pickle": {
-        "prefix": "load_pickle",
+    "load pickle": {
+        "prefix": "load pickle",
         "body": [
             "def load_pickle(path):",
             "\twith open(path, 'rb') as f:",
             "\t\tdata = pickle.load(f)",
             "\treturn data"
+        ]
+    },
+    "save pickle": {
+        "prefix": "save pickle",
+        "body": [
+            "def save_pickle(data, path):",
+            "\twith open(path, 'wb') as f:",
+            "\t\tpickle.dump(data, f)"
         ]
     },
 }
