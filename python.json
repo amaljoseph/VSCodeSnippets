@@ -11,7 +11,6 @@
     // 		"$2"
     // 	],
     // 	"description": "Log output to console"
-    // }
     "load image": {
         "prefix": "load image",
         "body": [
@@ -21,6 +20,13 @@
         ], 
         "description": "Load an image using csv"
     }, 
+    "save image": {
+        "prefix": "save image",
+        "body": [
+            "def save_image(image, path):",
+            "\tcv2.imwrite(path, image)"
+        ]
+    },
     "load pickle": {
         "prefix": "load pickle",
         "body": [
@@ -38,4 +44,72 @@
             "\t\tpickle.dump(data, f)"
         ]
     },
+    "load json": {
+        "prefix": "load json",
+        "body": [
+            "def load_json(path):",
+            "\twith open(path, 'r') as f:",
+            "\t\tdata = json.load(f)",
+            "\treturn data"
+        ]
+    },
+    "save json": {
+        "prefix": "save json",
+        "body": [
+            "def save_json(data, path):",
+            "\twith open(path, 'w', encoding='utf-8') as f:",
+            "\t\tjson.dump(data, f, ensure_ascii=False, indent=4)"
+        ]
+    },
+    "list files from directory": {
+        "prefix": "list files from directory",
+        "body": [
+            "def list_files_from_dir(dir_path, filter_type=None):",
+            "\tif filter_type:",
+            "\t\tfiles_list = [os.path.join(dir_path, file) for file in os.listdir(dir_path) if file.endswith(filter_type)]"
+            "\telse:",
+            "\t\tfiles_list = [os.path.join(dir_path, file) for file in os.listdir(dir_path)]"
+            "\treturn files_list"
+        ]
+    },
+    "format time in appropriate units like s/m/h/d": {
+        "prefix": "format_time_in_units",
+        "body": [
+            "def format_time_in_units(seconds):",
+            "    if seconds < 60:",
+            "        return f\"{seconds:.2f} seconds\"",
+            "    elif seconds < 3600:",
+            "        minutes = seconds / 60",
+            "        return f\"{minutes:.2f} minutes\"",
+            "    elif seconds < 86400:",
+            "        hours = seconds / 3600",
+            "        return f\"{hours:.2f} hours\"",
+            "    else:",
+            "        days = seconds / 86400",
+            "        return f\"{days:.2f} days\""
+        ],
+        "description": "format time in appropriate units like s/m/h/d"
+    },
+    "run_function_in_parallel": {
+    "prefix": "run_function_in_parallel",
+    "body": [
+        "def run_function_in_parallel(function, ids, data):",
+        "    from concurrent.futures import ThreadPoolExecutor, as_completed",
+        "    results = {}",
+        "    ",
+        "    def process_data(id, data_point):",
+        "        # boiler plate function",
+        "        return id, function(data_point)",
+        "    ",
+        "    with ThreadPoolExecutor() as executor:",
+        "        future_to_id = {",
+        "            executor.submit(process_data, id, data_point):  id for id, data_point in zip(ids, data)",
+        "        }",
+        "    ",
+        "    for future in as_completed(future_to_id):",
+        "        id, result = future.result()",
+        "        results[id] = result"
+        ],
+    "description": "run_function_in_parallel"
+}
 }
