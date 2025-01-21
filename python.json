@@ -14,8 +14,10 @@
     "load_image": {
         "prefix": "load image",
         "body": [
-            "def load_image(path):",
+            "def load_image(path, rgb=True):",
             "    image = cv2.imread(path)",
+            "    if rgb:",
+            "        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)",
             "    return image"
         ], 
         "description": "Load an image using csv"
