@@ -1,0 +1,302 @@
+{
+    // Place your snippets for python here. Each snippet is defined under a snippet name and has a prefix, body and 
+    // description. The prefix is what is used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+    // $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. Placeholders with the 
+    // same ids are connected.
+    // Example:
+    // "Print to console": {
+    // 	"prefix": "log",
+    // 	"body": [
+    // 		"console.log('$1');",
+    // 		"$2"
+    // 	],
+    // 	"description": "Log output to console"
+    "load_image": {
+        "prefix": "load image",
+        "body": [
+            "def load_image(image_path, rgb=False, grayscale=False):",
+            "    if not os.path.exists(image_path):", 
+            "        raise FileNotFoundError(f'Image not found at {image_path}')",
+            "    image = cv2.imread(image_path)", 
+            "    if image is None:", 
+            "       raise ValueError(f'Could not read image at {image_path}')",
+            "    if rgb:",
+            "        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)", 
+            "    if grayscale:", 
+            "        image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)", 
+            "    return image"
+        ], 
+        "description": "Load an image using csv"
+    }, 
+    "save_image": {
+        "prefix": "save image",
+        "body": [
+            "def save_image(image, output_path):",
+            "    if not cv2.imwrite(output_path, image):",
+            "       raise IOError(f'Could not write image to {output_path}')"
+        ]
+    },
+    "load_pickle": {
+        "prefix": "load pickle",
+        "body": [
+            "def load_pickle(pickle_path):",
+            "    if not os.path.exists(pickle_path):",
+            "        raise FileNotFoundError(f\"Pickle file not found at {pickle_path}\")",
+            "    ",
+            "    with open(pickle_path, 'rb') as f:",
+            "        data = pickle.load(f)",
+            "    ",
+            "    return data"
+        ],
+    },
+    "save_pickle": {
+        "prefix": "save pickle",
+        "body": [
+            "def save_pickle(data, path):",
+            "    with open(path, 'wb') as f:",
+            "        pickle.dump(data, f)"
+        ]
+    },
+    "load_json": {
+        "prefix": "load json",
+        "body": [
+            "def load_json(json_path):",
+            "    if not os.path.exists(json_path):",
+            "        raise FileNotFoundError(f\"JSON file not found at {json_path}\")",
+            "    ",
+            "    with open(json_path, 'r') as f:",
+            "        data = json.load(f)",
+            "    ",
+            "    return data"
+        ],
+    },
+    "save_json": {
+        "prefix": "save json",
+        "body": [
+            "def save_json(data, path):",
+            "    with open(path, 'w', encoding='utf-8') as f:",
+            "        json.dump(data, f, ensure_ascii=False, indent=4)"
+        ]
+    },
+    "list_files_from_directory": {
+        "prefix": "list files from directory",
+        "body": [
+            "def list_files_from_dir(dir_path, filter_type=None):",
+            "    if filter_type:",
+            "        files_list = [os.path.join(dir_path, file) for file in os.listdir(dir_path) if file.endswith(filter_type)]",
+            "    else:",
+            "        files_list = [os.path.join(dir_path, file) for file in os.listdir(dir_path)]",
+            "    return files_list"
+        ]
+    },
+    "format time in appropriate units like s/m/h/d": {
+        "prefix": "format_time_in_units",
+        "body": [
+            "def format_time_in_units(seconds):",
+            "    if seconds < 60:",
+            "        return f\"{seconds:.2f} seconds\"",
+            "    elif seconds < 3600:",
+            "        minutes = seconds / 60",
+            "        return f\"{minutes:.2f} minutes\"",
+            "    elif seconds < 86400:",
+            "        hours = seconds / 3600",
+            "        return f\"{hours:.2f} hours\"",
+            "    else:",
+            "        days = seconds / 86400",
+            "        return f\"{days:.2f} days\""
+        ],
+        "description": "format time in appropriate units like s/m/h/d"
+    },
+    "run_function_in_parallel": {
+        "prefix": "run_function_in_parallel",
+        "body": [
+            "def run_function_in_parallel(function, ids, data):",
+            "    from concurrent.futures import ThreadPoolExecutor, as_completed",
+            "    results = {}",
+            "    ",
+            "    def process_data(id, data_point):",
+            "        # boiler plate function",
+            "        return id, function(data_point)",
+            "    ",
+            "    with ThreadPoolExecutor() as executor:",
+            "        future_to_id = {",
+            "            executor.submit(process_data, id, data_point):  id for id, data_point in zip(ids, data)",
+            "        }",
+            "    ",
+            "    for future in as_completed(future_to_id):",
+            "        id, result = future.result()",
+            "        results[id] = result"
+            ],
+        "description": "run_function_in_parallel"
+    },
+    "argument_parser": {
+        "prefix": "arg_parser",
+        "body": [
+            "def get_args_parser():",
+            "    parser = argparse.ArgumentParser(\"PROGRAM_NAME\")",
+            "    ",
+            "    # nargs - no of arguments to follow - specific-no=2 | zero or more=* | one or more=+ | optional=?",
+            "    parser.add_argument(\"--input\", \"-i\", type=str, required=True, nargs=\"+\", help=\"input_file_path\")",
+            "    parser.add_argument(\"--threshold\", \"-t\", type=int, required=True, default=0.5, help=\"threshold\")",
+            "    parser.add_argument(\"--flag\", action=\"store_true\") # store_false append",
+            "    return parser.parse_args()"
+        ],
+        "description": "argument_parser"
+    }, 
+    "setup a logger with rotation": {
+        "prefix": "setup_logger",
+        "body": [
+            "def setup_logger(name: str, log_file: str = \"app.log\", level: int = logging.INFO) -> logging.Logger:",
+            "    import logging",
+            "    from logging.handlers import RotatingFileHandler",
+            "    \"\"\"",
+            "    Sets up a logger with a given name and configuration.",
+            "",
+            "    Args:",
+            "        name (str): The name of the logger.",
+            "        log_file (str): The file to log messages to. Defaults to 'app.log'.",
+            "        level (int): The logging level (e.g., logging.INFO, logging.DEBUG). Defaults to logging.INFO.",
+            "",
+            "    Returns:",
+            "        logging.Logger: Configured logger instance.",
+            "    \"\"\"",
+            "    # Create a logger",
+            "    logger = logging.getLogger(name)",
+            "    logger.setLevel(level)",
+            "",
+            "    # Check if the logger already has handlers to avoid duplicate logs",
+            "    if not logger.handlers:",
+            "        # Create a file handler with log rotation",
+            "        file_handler = RotatingFileHandler(log_file, maxBytes=5*1024*1024, backupCount=3)",
+            "        file_handler.setLevel(level)",
+            "",
+            "        # Create a console handler",
+            "        console_handler = logging.StreamHandler()",
+            "        console_handler.setLevel(level)",
+            "",
+            "        # Create a formatter and set it for both handlers",
+            "        formatter = logging.Formatter(",
+            "            \"%(asctime)s - %(name)s - %(levelname)s - %(message)s\"",
+            "        )",
+            "        file_handler.setFormatter(formatter)",
+            "        console_handler.setFormatter(formatter)",
+            "",
+            "        # Add handlers to the logger",
+            "        logger.addHandler(file_handler)",
+            "        logger.addHandler(console_handler)",
+            "",
+            "    return logger",
+            ""
+        ],
+        "description": "setup a logger with rotation"
+    }, 
+    "draw cv2 polylines from a list of lines": {
+        "prefix": "draw_polylines",
+        "body": [
+            "def draw_polylines(image, lines, isClosed=False, color=None, thickness=1):",
+            "    for line in lines:",
+            "        line_color = color if color is not None else (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))",
+            "        image = cv2.polylines(image, [np.array(line)], isClosed=isClosed, color=line_color, thickness=thickness)",
+            "    return image"
+        ],
+        "description": "draw cv2 polylines from a list of lines"
+    }, 
+    "position or concatenate or arrange images side by side": {
+        "prefix": "position_images_side_by_side",
+        "body": [
+            "def position_images_side_by_side(image1, image2):",
+            "    #### can be used for more images side by side - resize and concatenate them",
+            "    # Ensure all images are 3-channel",
+            "    def to_three_channels(img):",
+            "        if len(img.shape) == 2:  # [H, W]",
+            "            return np.stack([img] * 3, axis=-1)  # Convert grayscale to RGB",
+            "        return img",
+            "",
+            "    image1 = to_three_channels(image1)",
+            "    image2 = to_three_channels(image2)",
+            "",
+            "    # Resize output and binary to match input dimensions",
+            "    height, width = image1.shape[:2]",
+            "    image2 = cv2.resize(image2, (width, height))",
+            "",
+            "    # Concatenate side-by-side",
+            "    combined = np.concatenate((image1, image2), axis=1)",
+            "    return combined"
+        ],
+        "description": ""
+    }, 
+    "plot_images_in_grid": {
+    "prefix": "plot_images_in_grid",
+    "body": [
+        "def plot_images_in_grid(images, ncols=1, sub_titles=None, plot_title=None):",
+        "    nrows = math.ceil(len(images) / ncols)",
+        "    fig, axs = plt.subplots(nrows, ncols, figsize=(15, 3 * nrows))",
+        "    axs = axs.flatten()",
+        "    ",
+        "    if plot_title:",
+        "        fig.suptitle(plot_title, fontsize=16)",
+        "    for i, img in enumerate(images):",
+        "        axs[i].imshow(img)",
+        "        axs[i].axis('off')",
+        "        if sub_titles[i]:",
+        "            axs[i].set_title(sub_titles[i], fontsize=10)",
+        "            ",
+        "    ",
+        "    for j in range(i + 1, len(axs)):",
+        "        axs[j].axis('off')",
+        "    ",
+        "    plt.tight_layout()",
+        "    plt.show()"
+    ],
+    "description": "plot_images_in_grid"
+    }, 
+    "create directories from one or more directory paths. Also overwrites them if exists controlled by overwrite flag.": {
+        "prefix": "prepare_dirs",
+        "body": [
+            "def prepare_dirs(directories, overwrite=False):",
+            "    if isinstance(directories, str):",
+            "        directories = [directories]",
+            "    for directory in directories:",
+            "        if os.path.exists(directory):",
+            "            if overwrite:",
+            "                shutil.rmtree(directory)",
+            "                os.makedirs(directory, exist_ok=True)",
+            "        else:",
+            "            os.makedirs(directory, exist_ok=True)"
+        ],
+        "description": "create directories from one or more directory paths. Also overwrites them if exists controlled by overwrite flag."
+    }, 
+    "crop image for shapes with polygon coordinates, like lines or characters": {
+    "prefix": "crop_image_with_coordinates",
+    "body": [
+        "def crop_image_with_coordinates(image, coordinates, make_transparent=False, output_path=None):",
+        "    points = np.array(coordinates, dtype=np.int32)",
+        "    ",
+        "    # Create a mask to isolate the polygon area",
+        "    mask = np.zeros(image.shape[:2], dtype=np.uint8)",
+        "    cv2.fillPoly(mask, [points], (255))",
+        "    ",
+        "    # Create a cropped image using the mask",
+        "    cropped_image = cv2.bitwise_and(image, image, mask=mask)",
+        "    ",
+        "    # Get bounding box to crop the area",
+        "    x, y, w, h = cv2.boundingRect(points)",
+        "    cropped_image = cropped_image[y:y+h, x:x+w]",
+        "    ",
+        "    if make_transparent:",
+        "        # Create an RGBA image (with transparent background)",
+        "        rgba_image = cv2.cvtColor(cropped_image, cv2.COLOR_BGR2BGRA)",
+        "        ",
+        "        # Set alpha channel to 0 (fully transparent) for the background",
+        "        rgba_image[:, :, 3] = (rgba_image[:, :, 3] * (mask[y:y+h, x:x+w] / 255)).astype(np.uint8)",
+        "        cropped_image = rgba_image",
+        "    else:",
+        "        # Fill the background with white (if transparent is not desired)",
+        "        cropped_image[mask == 0] = [255, 255, 255]",
+        "    ",
+        "    return cropped_image"
+    ],
+    "description": "crop image for shapes with polygon coordinates, like lines or characters"
+    }
+
+}
